@@ -49,12 +49,12 @@ class ApiEndPoint extends \Magento\Framework\App\Helper\AbstractHelper
         'TIKTOK' => [
             'sandbox' => [
                 'AUTHENTICATION' => 'https://connector-dev.demo.cedcommerce.com/remote/public/apiconnect/request/auth?sAppId=36',
-                'REFRESH_TOKEN' => '',
+                'REFRESH_TOKEN' => 'https://connector-dev.demo.cedcommerce.com/tiktok/public/magentohome/request/getNewRefershToken',
                 'WEB_HOOK_URL' => 'https://cr0gdi1hs5.execute-api.ap-southeast-1.amazonaws.com/v1/magento_webhook_py'
             ],
             'live' => [
                 'AUTHENTICATION' => 'https://aliexpress-channel.remote.sellernext.com/apiconnect/request/commenceAuth?sAppId=6',
-                'REFRESH_TOKEN' => '',
+                'REFRESH_TOKEN' => 'https://connector-dev.demo.cedcommerce.com/tiktok-integration/public/magentohome/request/getNewRefershToken',
                 'WEB_HOOK_URL' => 'https://cr0gdi1hs5.execute-api.ap-southeast-1.amazonaws.com/v1/magento_webhook_py'
             ]
         ]
