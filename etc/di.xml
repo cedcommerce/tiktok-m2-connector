@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+  * CedCommerce
+  *
+  * NOTICE OF LICENSE
+  *
+  * This source file is subject to the End User License Agreement (EULA)
+  * that is bundled with this package in the file LICENSE.txt.
+  * It is also available through the world-wide-web at this URL:
+  * http://cedcommerce.com/license-agreement.txt
+  *
+  * @category    Ced
+  * @package     Ced_MagentoConnector
+  * @author      CedCommerce Core Team <connect@cedcommerce.com>
+  * @copyright   Copyright CEDCOMMERCE (http://cedcommerce.com/)
+  * @license     http://cedcommerce.com/license-agreement.txt
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Ced\MagentoConnector\Api\OrderInterface" type="Ced\MagentoConnector\Model\Api\Order"/>
+    <preference for="Ced\MagentoConnector\Api\CallbackInterface" type="Ced\MagentoConnector\Model\Api\Callback"/>
+    <preference for="Ced\MagentoConnector\Api\TokenInterface" type="Ced\MagentoConnector\Model\Api\Token"/>
+    <preference for="Ced\MagentoConnector\Api\CarrierListInterface" type="Ced\MagentoConnector\Model\Api\Carriers"/>
+    <preference for="Ced\MagentoConnector\Api\CurrencyListInterface" type="Ced\MagentoConnector\Model\Api\Currency"/>
+    <preference for="Ced\MagentoConnector\Api\VariantAttributeInterface" type="Ced\MagentoConnector\Model\Api\VariantAttribute"/>
+    <preference for="Ced\MagentoConnector\Api\AttributeOptionsInterface" type="Ced\MagentoConnector\Model\Api\AttributeOptions"/>
+
+    <type name="Magento\User\Controller\Adminhtml\User\Delete">
+        <plugin name="userDelete" type="Ced\MagentoConnector\Plugin\AdminUserDelete" sortOrder="10"/>
+    </type>
+
+    <type name="Magento\Integration\Controller\Adminhtml\Integration\Delete">
+        <plugin name="integrationDelete" type="Ced\MagentoConnector\Plugin\IntegrationDelete" sortOrder="11"/>
+    </type>
+</config>

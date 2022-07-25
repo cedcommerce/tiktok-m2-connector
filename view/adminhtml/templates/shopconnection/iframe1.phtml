@@ -1,0 +1,95 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category  Ced
+ * @package   Ced_MagentoConnector
+ * @author    CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright Copyright CEDCOMMERCE (http://cedcommerce.com/)
+ * @license   http://cedcommerce.com/license-agreement.txt
+ */
+
+/* @var $block Ced\MagentoConnector\Block\Adminhtml\Shop\Success */
+$url = $block->getAppUrl();
+$loader = $block->getViewFileUrl('Ced_MagentoConnector::images/loader.gif');
+?>
+
+
+<div class="accordion">
+    <div class="entry-edit form-inline">
+        <div class="section-config">
+            <!--codes for to show Different contact medium-->
+            <div class="entry-edit-head">
+                <fieldset>
+                    <div class="entry-edit-head admin__collapsible-block">
+                        <span class="entry-edit-head-link" id="link"></span>
+                        <div>
+                            <div class="image-contener">
+                                <iframe id="iframe_app" src="<?= $url ?>" name="frame1" scrolling="auto" frameborder="no" align="center" width = "100%">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .icon-box .image {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .contact-section .icon-box.icon {
+        width: 100%;
+    }
+    span {
+        display: block;
+    }
+    .message-green {
+        font-weight: bold;
+        font-size: large;
+    }
+    .image-contener {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        padding-top: 56.25%;
+    }
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+</style>
+
+<script type = "text/javascript">
+require(['jquery'], function ($){
+        $('body').trigger('processStart');
+        setTimeout(hide, 10000); // 10 seconds
+        $(function() {
+            $('body').trigger('processStart');
+        });
+        function hide(){
+          $('body').trigger('processStop');
+          $('body').trigger('processStop');
+         };
+
+    });
+
+</script>

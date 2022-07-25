@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_MagentoConnector
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (http://cedcommerce.com/)
+ * @license     http://cedcommerce.com/license-agreement.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Integration:etc/integration/integration.xsd">
+    <integration name="Magento Connector">
+        <email>braydenaston@cedcommerce.com</email>
+        <endpoint_url>https://dev.aliexpress-home.cedcommerce.com/magentohome/request/getNewRefershToken</endpoint_url>
+        <identity_link_url>https://dev.aliexpress-home.cedcommerce.com/magentohome/request/getNewRefershToken</identity_link_url>
+        <resources>
+            <resource name="Ced_MagentoConnector::order_create" />
+            <resource name="Ced_MagentoConnector::callback" />
+            <resource name="Ced_MagentoConnector::order_cancel" />
+            <resource name="Ced_MagentoConnector::refreshtoken" />
+            <resource name="Ced_MagentoConnector::carriers_list" />
+            <resource name="Ced_MagentoConnector::variant_attr" />
+            <resource name="Ced_MagentoConnector::attr_options" />
+            <resource name="Magento_Catalog::attributes_attributes" />
+            <resource name="Magento_Catalog::products" />
+        </resources>
+    </integration>
+</config>
