@@ -32,7 +32,7 @@
         />
 
         <add id="Ced_MagentoConnector::connect_shop"
-             title="Magento Connector"
+             title="Ced Magento Connector"
              module="Ced_MagentoConnector"
              sortOrder="10"
              parent="Ced_MagentoConnector::mconnector"
@@ -49,3 +49,4 @@
         />
     </menu>
 </config>
+
