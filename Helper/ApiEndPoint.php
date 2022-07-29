@@ -53,9 +53,9 @@ class ApiEndPoint extends \Magento\Framework\App\Helper\AbstractHelper
                 'WEB_HOOK_URL' => 'https://cr0gdi1hs5.execute-api.ap-southeast-1.amazonaws.com/v1/magento_webhook_py'
             ],
             'live' => [
-                'AUTHENTICATION' => 'https://aliexpress-channel.remote.sellernext.com/apiconnect/request/commenceAuth?sAppId=6',
-                'REFRESH_TOKEN' => 'https://connector-dev.demo.cedcommerce.com/tiktok-integration/public/magentohome/request/getNewRefershToken',
-                'WEB_HOOK_URL' => 'https://cr0gdi1hs5.execute-api.ap-southeast-1.amazonaws.com/v1/magento_webhook_py'
+                'AUTHENTICATION' => 'https://common-channel.remote.sellernext.com/apiconnect/request/commenceAuth?sAppId=6',
+                'REFRESH_TOKEN' => 'https://tiktokshop.sellernext.com/tiktok/public/magentohome/request/getNewRefershToken',
+                'WEB_HOOK_URL' => 'https://phfnhcoq12.execute-api.eu-west-2.amazonaws.com/live/magento_webhook_live'
             ]
         ]
     ];
@@ -121,7 +121,7 @@ class ApiEndPoint extends \Magento\Framework\App\Helper\AbstractHelper
         $finaleData = [];
         $finaleData["action"] = "webhook_manage";
         $finaleData['data'] = $data;
-        $url =  self::URLS[self::FRAMEWORK][self::TYPE]['AUTHENTICATION'];
+        $url =  self::URLS[self::FRAMEWORK][self::TYPE]['WEB_HOOK_URL'];
         $requestParameters = json_encode($finaleData);
         //@codingStandardsIgnoreStart
         $ch = curl_init();

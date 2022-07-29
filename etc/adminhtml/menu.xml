@@ -25,14 +25,14 @@
     <menu>
 
         <add id="Ced_MagentoConnector::mconnector"
-             title="Connector"
+             title="Ced Connector"
              module="Ced_MagentoConnector"
              sortOrder="10"
              resource="Ced_MagentoConnector::mconnector"
         />
 
         <add id="Ced_MagentoConnector::connect_shop"
-             title="Magento Connector"
+             title="TikTok Shop Connector"
              module="Ced_MagentoConnector"
              sortOrder="10"
              parent="Ced_MagentoConnector::mconnector"
