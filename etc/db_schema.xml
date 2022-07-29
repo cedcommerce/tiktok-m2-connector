@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="sales_order" resource="sales" engine="innodb" >
-        <column xsi:type="text" name="source_marketplace" nullable="true" comment="source_marketplace"/>
+        <column xsi:type="varchar" length="225" name="source_marketplace" nullable="true" comment="source_marketplace"/>
     </table>
     <table name="sales_order_grid" resource="sales" engine="innodb">
-        <column xsi:type="text" name="source_marketplace" nullable="true" comment="source_marketplace"/>
+        <column xsi:type="varchar" length="225" name="source_marketplace" nullable="true" comment="source_marketplace"/>
     </table>
     <table name="ced_connector_logs" resource="default">
         <column xsi:type="int" name="id" padding="10" identity="true" unsigned="true" nullable="false" comment="Id"/>
