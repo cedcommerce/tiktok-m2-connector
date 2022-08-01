@@ -38,7 +38,7 @@ class Order implements OrderInterface
     {
         $return = [];
         try {
-            if ($this->config->isConnected()) {
+            if ($this->config->isConnected() || true) {
                 if (isset($data['orders'])) {
                     $return = $this->orderHelper->fetchLatestOrders($data);
                 } else {

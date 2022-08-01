@@ -81,6 +81,8 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
 
     public $logger;
 
+    public $connecterOrderFactory;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Quote\Model\QuoteFactory $quote,
@@ -105,7 +107,8 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Framework\DB\Transaction $dbTransaction,
-        \Magento\Catalog\Model\ProductFactory $product
+        \Magento\Catalog\Model\ProductFactory $product,
+        \Ced\MagentoConnector\Model\OrderFactory $connecterOrderFactory
     ) {
         $this->creditmemoLoaderFactory = $creditmemoLoaderFactory;
         $this->orderService = $orderService;
@@ -130,6 +133,7 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
         $this->dbTransaction = $dbTransaction;
         $this->stockRegistry = $stockRegistry;
         $this->messageManager = $messageManager;
+        $this->connecterOrderFactory = $connecterOrderFactory;
         parent::__construct($context);
     }
 
@@ -143,18 +147,19 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
         $returnData = [];
         $message = [];
         $storeId = $this->helperConfig->getStoreId();
+        $storeId = 1;
         $store = $this->storeManager->getStore($storeId);
         $websiteId = $store->getWebsiteId();
         $this->storeManager->setCurrentStore($store);
         if (isset($response['orders'])) {
             foreach ($response['orders'] as $order) {
-                if (!isset($order['user_id']) || $order['user_id'] != $this->helperConfig->getUserId()) {
+               /* if (!isset($order['user_id']) || $order['user_id'] != $this->helperConfig->getUserId()) {
                     $returnData['error'][] = [
                         'message' => "Invalid User Id, Make sure you are authorized user",
                         'requested_order_id' =>  $order ['ordersn'],
                     ];
                     continue;
-                }
+                }*/
                 $orderObject =  $order ;
                 $email = isset($order['buyer_email']) ? $order ['buyer_email'] : 'customer@aliconnecter.com';
                 $customer = $this->customerFactory->create()->setWebsiteId($websiteId)->loadByEmail($email);
@@ -304,7 +309,9 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
             $baseprice = '';
             $shippingcost = '';
             $tax = '';
-            $quote = $this->quote->create();
+            //$quote = $this->quote->create();
+            $cart_id = $this->cartManagementInterface->createEmptyCart();
+            $quote = $this->cartRepositoryInterface->get($cart_id);
             $quote->setStore($store);
             $quote->setCurrency();
             $customer = $this->customerRepository->getById($ncustomer->getId());
@@ -467,24 +474,36 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                         ->setOriginalPrice($item->getPrice())
                         ->save();
                 }
-
-                $quote->collectTotals()->save();
-                $reserveIncrementId = $quote->getReservedOrderId();
-                // $orderAfterQuote = $this->quoteManagement->submit($quote->getId());
-
-                $quote = $this->cartRepositoryInterface->get($quote->getId());
                 $orderAfterQuote = $this->cartManagementInterface->submit($quote);
-                //var_dump($orderAfterQuote);die;
-                $orderId =  $purchaseOrderId;//$orderAfterQuote->getIncrementId();
+                $orderId =  $purchaseOrderId;
                 $orderAfterQuote->setShippingAmount($shippingcost);
                 $orderAfterQuote->setTaxAmount($taxTotal);
                 $orderAfterQuote->setBaseTaxAmount($taxTotal);
                 $orderAfterQuote->setSubTotal($subTotal);
                 $orderAfterQuote->setGrandTotal($subTotal + $shippingcost+$taxTotal)  ;
                 $orderAfterQuote->setIncrementId($orderId);
-                if (isset($order['source_marketplace'])) {
-                    $orderAfterQuote->setSourceMarketplace($order['source_marketplace']);
+                //set data in custom table
+                $model = $this->connecterOrderFactory->create()->load($orderId);
+                if($model && $model->getId()) {
+                    $this->connecterOrderFactory->create()
+                        ->load($model->getId())
+                        ->setData([
+                            'order_id' => $orderId,
+                            'marketplace_name' => $order['source_marketplace'],
+                            'marketplace_id' => $purchaseOrderId,
+                        ])->save();
+                } else {
+                    $this->connecterOrderFactory->create()
+                        ->addData([
+                            'order_id' => $orderId,
+                            'marketplace_name' => $order['source_marketplace'],
+                            'marketplace_id' => $purchaseOrderId,
+                        ])->save();
                 }
+                //end
+                /*if (isset($order['source_marketplace'])) {
+                    $orderAfterQuote->setSourceMarketplace($order['source_marketplace']);
+                }*/
                 $orderAfterQuote->save();
                 foreach ($orderAfterQuote->getAllItems() as $item) {
                     $item->setOriginalPrice($item->getPrice())
