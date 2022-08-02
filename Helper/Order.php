@@ -147,7 +147,6 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
         $returnData = [];
         $message = [];
         $storeId = $this->helperConfig->getStoreId();
-        $storeId = 1;
         $store = $this->storeManager->getStore($storeId);
         $websiteId = $store->getWebsiteId();
         $this->storeManager->setCurrentStore($store);
