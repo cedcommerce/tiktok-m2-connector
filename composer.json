@@ -2,7 +2,7 @@
     "name": "ced/tiktok-m2-connector",
     "description": "magentoconnector-tiktok - Magento 2 Connector For Tiktok",
     "type": "magento2-module",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "license": [
         "EULA"
     ],
