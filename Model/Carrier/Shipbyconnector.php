@@ -79,6 +79,9 @@ class Shipbyconnector extends \Magento\Shipping\Model\Carrier\AbstractCarrier im
         if (!$this->getConfigFlag('active')) {
             return false;
         }
+        if ($this->appState->getAreaCode() != 'adminhtml') {
+            return false;
+        }
         /*if ($this->appState->getAreaCode() == 'webapi_rest') {
             return false;
         }*/
