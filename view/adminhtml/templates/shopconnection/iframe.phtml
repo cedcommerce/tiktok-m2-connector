@@ -1,0 +1,78 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category  Ced
+ * @package   Ced_MagentoConnector
+ * @author    CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright Copyright CEDCOMMERCE (http://cedcommerce.com/)
+ * @license   http://cedcommerce.com/license-agreement.txt
+ */
+
+/* @var $block Ced\MagentoConnector\Block\Adminhtml\Shop\Success */
+$flag = $block->checkDetails();
+$all = $block->checkAllDetails();
+$url = $block->getAppUrl();
+$currentUrl = $block->getUrl("*/*/success");
+?>
+<div class="accordion">
+    <div class="entry-edit form-inline">
+        <div class="section-config">
+            <!--codes for to show Different contact medium-->
+            <div class="entry-edit-head">
+                <fieldset>
+                    <div class="entry-edit-head admin__collapsible-block">
+                        <span class="entry-edit-head-link" id="link"></span>
+                        <?php
+                        $message = 'Please wait while we are connecting....';
+                        if ($flag) {
+                            $message = 'Already Connected';
+                        }
+                        ?>
+                        <div>
+                            <div class="image-contener">
+                                <img src="<?= /* @noEscape */$block->getViewFileUrl(
+                                    'Ced_MagentoConnector::images/ali.svg'
+                                ); ?>"
+                                     width="100px">
+                                <span class ="message-green"><?= /* @noEscape */ $message ?></span>
+
+                            </div>
+                        </div>
+                        <p>You will be redirect to our app soon</p>
+                    </div>
+                </fieldset>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .icon-box .image {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .contact-section .icon-box.icon {
+        width: 100%;
+    }
+    span {
+        display: block;
+    }
+    .message-green {
+        font-weight: bold;
+        font-size: large;
+    }
+</style>
+
+<script>
+       window.open('<?= /* @noEscape */ $url?>',"_self");
+</script>

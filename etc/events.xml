@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="catalog_product_save_after">
+        <observer name="ced_product_save_after" instance="Ced\MagentoConnector\Observer\ProductSaveAfter" />
+    </event>
+    <event name="admin_user_save_after">
+        <observer name="ced_admin_user_save_after" instance="Ced\MagentoConnector\Observer\AdminUserSave" />
+    </event>
+    <event name="catalog_product_save_before">
+        <observer name="ProductSaveBefore" instance="Ced\MagentoConnector\Observer\ProductSaveBefore" />
+    </event>
+    <event name="catalog_product_delete_after_done">
+        <observer name="ced_product_delete" instance="Ced\MagentoConnector\Observer\ProductDelete"/>
+    </event>
+    <event name="sales_order_shipment_save_after">
+        <observer name="ced_order_shipment" instance="Ced\MagentoConnector\Observer\Shipment"/>
+    </event>
+    <event name="sales_order_shipment_track_save_after">
+        <observer name="SaveAfter" instance="Ced\MagentoConnector\Observer\Shipment" />
+    </event>
+    <event name="sales_order_shipment_resource_save_after">
+        <observer name="ced_order_shipment_resource" instance="Ced\MagentoConnector\Observer\Shipment"/>
+    </event>
+
+</config>

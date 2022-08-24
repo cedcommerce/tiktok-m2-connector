@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Ced_MagentoConnector::mconnector" title="Ced Connector"
+                          translate="title" sortOrder="110">
+                    <resource id="Ced_MagentoConnector::connect_shop" title="Magento Connector"  sortOrder="2">
+                    </resource>
+                    <resource id="Ced_MagentoConnector::logs" title="Logs"  sortOrder="4">
+                    </resource>
+                    <resource id="Ced_MagentoConnector::order_create" title="Order Create"
+                              translate="title" sortOrder="10" />
+                    <resource id="Ced_MagentoConnector::order_cancel" title="Order Cancel"
+                              translate="title" sortOrder="11" />
+
+                    <resource id="Ced_MagentoConnector::callback" title="Callback"
+                              translate="title" sortOrder="12" />
+                    <resource id="Ced_MagentoConnector::refreshtoken" title="Refresh Token"
+                              translate="title" sortOrder="13" />
+
+                    <resource id="Ced_MagentoConnector::carriers_list" title="Carriers List"
+                              translate="title" sortOrder="14" />
+
+                    <resource id="Ced_MagentoConnector::currency_list" title="Currency List"
+                              translate="title" sortOrder="15" />
+
+                    <resource id="Ced_MagentoConnector::variant_attr" title="Attribute"
+                              translate="title" sortOrder="16" />
+
+                    <resource id="Ced_MagentoConnector::attr_options" title="Attribute Options"
+                              translate="title" sortOrder="16" />
+
+                    <resource id="Ced_MagentoConnector::ced_product_stock" title="Products And Stock"
+                              translate="title" sortOrder="17" />
+
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

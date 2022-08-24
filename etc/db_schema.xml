@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ced_connector_logs" resource="default">
+        <column xsi:type="int" name="id" padding="10" identity="true" unsigned="true" nullable="false" comment="Id"/>
+        <column xsi:type="text" name="log_type" nullable="false" />
+        <column xsi:type="text" name="log_sub_type" nullable="false" />
+        <column xsi:type="text" name="log_date" nullable="false" />
+        <column xsi:type="text" name="log_comment" nullable="false" />
+        <column xsi:type="text" name="log_value" nullable="false" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="ced_market_order" resource="default">
+        <column xsi:type="int" name="id" padding="10" identity="true" unsigned="true" nullable="false" comment="Id"/>
+        <column xsi:type="varchar" length="225" name="order_id" nullable="false" />
+        <column xsi:type="varchar" length="225" name="marketplace_name" nullable="false" />
+        <column xsi:type="varchar" length="225" name="marketplace_id" nullable="true" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+</schema>
