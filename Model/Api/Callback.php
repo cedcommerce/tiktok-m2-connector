@@ -34,6 +34,7 @@ class Callback implements CallbackInterface
                 $preData = [];
                 if (isset($data['success']) && $data['success'] == true && isset($data['user_id'])) {
                     $preData['is_connected'] = true;
+                    $preData['setup_upgrade'] = false;
                     $preData['user_id'] = $data['user_id'];
                     $preData['dashboard_url'] = isset($data['dashboard_url']) ?
                         $data['dashboard_url'] : '';
@@ -42,15 +43,7 @@ class Callback implements CallbackInterface
                     $preData['is_connected'] = false;
                     $return['error'] = 'Some details is missing.';
                 }
-                /*$configData = [
-                    'section' => 'mconnector_configuration',
-                    'website' => 0,
-                    'store' => 0,
-                    'groups' => ['setting' => ['fields' => $preData]]
-                ];*/
                 $this->dataHelper->setConfig($preData);
-                //$configModel = $this->factory->create(['data' => $configData]);
-                //$configModel->save();
             } else {
                 $return['error'] = ' InCorrect Data.';
             }

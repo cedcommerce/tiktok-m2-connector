@@ -1,0 +1,26 @@
+{
+    "ced_connector_logs": {
+        "column": {
+            "id": true,
+            "log_type": true,
+            "log_sub_type": true,
+            "log_date": true,
+            "log_comment": true,
+            "log_value": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "ced_market_order": {
+        "column": {
+            "id": true,
+            "order_id": true,
+            "marketplace_name": true,
+            "marketplace_id": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

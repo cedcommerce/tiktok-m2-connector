@@ -102,6 +102,27 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         return $value;
     }
 
+    public function isSetupUpgradeFlag()
+    {
+        $value = $this->scopeConfig->getValue(self::SETTING_PATH.'setup_upgrade');
+        return $value;
+    }
+
+    public function getEmail()
+    {
+        $value = $this->scopeConfig->getValue(self::SETTING_PATH.'email');
+        return $value;
+    }
+
+    public function getStoreCode()
+    {
+        $value = $this->scopeConfig->getValue(self::SETTING_PATH.'storeCode');
+        if($value == 'admin'){
+            return null;
+        }
+        return $value;
+    }
+
     public function getUserPassword()
     {
         $value = $this->scopeConfig->getValue(self::SETTING_PATH.'password');
@@ -128,7 +149,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
             'password',
             'token_type',
             'user_id',
-            'oldpassword'
+            'oldpassword',
         ];
         foreach ($keys as $key) {
             $value = $this->scopeConfig->getValue(self::SETTING_PATH.''.$key);

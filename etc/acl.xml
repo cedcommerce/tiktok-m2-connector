@@ -34,7 +34,6 @@
 
                     <resource id="Ced_MagentoConnector::ced_product_stock" title="Products And Stock"
                               translate="title" sortOrder="17" />
-
                 </resource>
             </resource>
         </resources>

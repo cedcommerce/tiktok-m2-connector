@@ -12,34 +12,38 @@ class Recurring implements InstallSchemaInterface
     protected $logger;
     protected $apiEndPoint;
     protected $config;
+    protected $helper;
 
     public function __construct(
         \Ced\MagentoConnector\Helper\Logger $logger,
         \Ced\MagentoConnector\Helper\ApiEndPoint $apiEndPoint,
-        \Ced\MagentoConnector\Helper\Config $config
+        \Ced\MagentoConnector\Helper\Config $config,
+        \Ced\MagentoConnector\Helper\Data $helper
     ) {
         $this->logger = $logger;
         $this->apiEndPoint = $apiEndPoint;
         $this->config = $config;
+        $this->helper = $helper;
     }
 
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
         $data = [];
-        if ($this->config->isConnected()) {
+        if (true || $this->config->isConnected()) {
+            $this->helper->setConfig(['setup_upgrade' => true]);
             $data['token_type'] = $this->config->getTokenType();
             $data['storeurl'] = $this->config->getStoreurl();
             $data['setup_upgrade'] = true;
-
+            $response = $this->apiEndPoint->sendTokenByCurl($data);
+            $this->logger->logger(
+                'Setup Upgrade',
+                'Installer',
+                "Response . ".json_encode($response),
+                'Installer is running  '
+            );
         }
-        $response = $this->apiEndPoint->sendTokenByCurl($data);
-        $this->logger->logger(
-            'Setup Upgrade',
-            'Installer',
-            "Response . ".json_encode($response),
-            'Installer is running  '
-        );
+
         $setup->endSetup();
     }
 }

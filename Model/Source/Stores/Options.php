@@ -39,7 +39,9 @@ class Options extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $data[] = ['value' => '','label' => 'Select Store'];
         if ($collection) {
             foreach ($collection as $store) {
-                $data[] = ['value' => $store->getId(), 'label' => $store->getCode()];
+                if ($store->getId()) {
+                    $data[] = ['value' => $store->getId(), 'label' => $store->getCode()];
+                }
             }
         } else {
             $data[] = ['value' => '','label' => 'No Account'];

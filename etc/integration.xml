@@ -33,6 +33,7 @@
             <resource name="Ced_MagentoConnector::ced_product_stock" />
             <resource name="Magento_Catalog::attributes_attributes" />
             <resource name="Magento_Catalog::products" />
+            <resource name="Magento_Catalog::sets" />
         </resources>
     </integration>
 </config>

@@ -27,15 +27,13 @@ class SourceItem
     }
 
     /**
-     * Retrieves links that are assigned to $stockId
-     *
-     * @param array $skus
-     * @return SourceItemInterface[]
+     * @param $sku
+     * @return array
      */
-    public function getSourceItemDetailBySKU($skus)
+    public function getSourceItemDetailBySKU($sku)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SKU, ['in' => $skus])
+            ->addFilter(SourceItemInterface::SKU, $sku)
             ->create();
         $result = $this->sourceItemRepository->getList($searchCriteria)->getItems();
         $returnValue = [];

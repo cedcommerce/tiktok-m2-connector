@@ -16,18 +16,22 @@ class ProductStock implements ProductStockInterface
 
     public $productFactory;
 
+    public $sourceItem;
+
     public function __construct(
         \Ced\MagentoConnector\Helper\Logger $logger,
         \Ced\MagentoConnector\Helper\Config $config,
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrencyInterface,
         \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Ced\MagentoConnector\Helper\SourceItem $sourceItem,
         \Magento\Directory\Model\Currency $currency
     ) {
         $this->logger = $logger;
         $this->config = $config;
         $this->currency = $currency;
         $this->request = $request;
+        $this->sourceItem = $sourceItem;
         $this->productFactory = $productFactory;
         $this->priceCurrencyInterface = $priceCurrencyInterface;
     }
@@ -39,9 +43,13 @@ class ProductStock implements ProductStockInterface
         $returnData = [];
         if ($this->config->isConnected()) {
             $userID = $this->config->getUserId();
-            $storeID = $this->config->getStoreId();
+            $userID = $this->config->getUserId();
+            $storeCode = $this->config->getStoreCode();
             $params = $this->request->getParams();
             $sub = '/V1/products';
+            if ($storeCode) {
+                $sub = '/'.$storeCode.'/V1/products';
+            }
             //pageSize
             if(isset($params['pageSize'])) {
                 $sub .= '?searchCriteria[pageSize]='.$params['pageSize'];
@@ -54,7 +62,7 @@ class ProductStock implements ProductStockInterface
             if(isset($params['visibility']) && ($params['visibility'] <= 4)) {
                 $sub .= '&searchCriteria[filter_groups][0][filters][0][field]=visibility&searchCriteria[filter_groups][0][filters][0][value]='.$params['visibility'].'&searchCriteria[filter_groups][0][filters][0][condition_type]=eq';
             }
-            $sub .= '&searchCriteria[filter_groups][0][filters][0][field]=type_id&searchCriteria[filter_groups][0][filters][0][value]=configurable&searchCriteria[filter_groups][0][filters][0][condition_type]=eq';
+            //$sub .= '&searchCriteria[filter_groups][0][filters][0][field]=type_id&searchCriteria[filter_groups][0][filters][0][value]=configurable&searchCriteria[filter_groups][0][filters][0][condition_type]=eq';
 
             $baseUrl = $this->config->getStoreurl();
             $url = $baseUrl.'rest'.$sub;
@@ -65,13 +73,27 @@ class ProductStock implements ProductStockInterface
                         $childslist = $this->getChildsFromParent($respon['sku']);
                         foreach ($childslist as $key1 => $child) {
                                 if(isset($child['sku'])) {
-                                    $stock = $this->getStockInfo('/V1/stockItems/'.$child['sku']);
+                                    $stock = $this->sourceItem->getSourceItemDetailBySKU($child['sku']);
+                                    if(!isset($stock[0]['source_item_id'])) {
+                                        $substock = '/V1/stockItems/';
+                                        if ($storeCode) {
+                                            $substock = '/'.$storeCode.'/V1/stockItems';
+                                        }
+                                       $stock = $this->getStockInfo($substock.$child['sku']);
+                                    }
                                     $childslist[$key1]['stock'] = $stock;
                                 }
                         }
                        $response['items'][$key]['childs_list'] = $childslist;
                     } else {
-                        $stock = $this->getStockInfo('/V1/stockItems/'.$respon['sku']);
+                        $stock = $this->sourceItem->getSourceItemDetailBySKU($respon['sku']);
+                        if(!isset($stock[0]['source_item_id'])) {
+                            $substock = '/V1/stockItems/';
+                            if ($storeCode) {
+                                $substock = '/'.$storeCode.'/V1/stockItems';
+                            }
+                           $stock = $this->getStockInfo($substock.$respon['sku']);
+                        }
                         $response['items'][$key]['stock'] = $stock;
                     }
                 }
@@ -116,6 +138,7 @@ class ProductStock implements ProductStockInterface
         );
         $result = curl_exec($ch);
         $result = json_decode($result, 1);
+
         return $result;
 
     }

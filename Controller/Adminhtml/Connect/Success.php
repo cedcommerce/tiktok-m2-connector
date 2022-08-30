@@ -31,26 +31,42 @@ class Success extends \Magento\Backend\App\Action
      */
     public $resultPageFactory;
 
-    public $config;
-
     public $resultFactory;
+    public $integrationToken;
+    public $helper;
+    public $apiEndPoint;
+    public $logger;
+    public $config;
 
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
      * @param \Ced\MagentoConnector\Helper\Config $config
+     * @param \Ced\MagentoConnector\Helper\IntegrationToken $integrationToken
+     * @param \Ced\MagentoConnector\Helper\Data $helper
+     * @param \Ced\MagentoConnector\Helper\ApiEndPoint $apiEndPoint
+     * @param \Ced\MagentoConnector\Helper\Logger $logger
+     * @param \Magento\Framework\Controller\ResultFactory $resultFactory
      */
 
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
         \Ced\MagentoConnector\Helper\Config $config,
+        \Ced\MagentoConnector\Helper\IntegrationToken $integrationToken,
+        \Ced\MagentoConnector\Helper\Data $helper,
+        \Ced\MagentoConnector\Helper\ApiEndPoint $apiEndPoint,
+        \Ced\MagentoConnector\Helper\Logger $logger,
         \Magento\Framework\Controller\ResultFactory $resultFactory
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
-        $this->config = $config;
         $this->resultFactory = $resultFactory;
+        $this->integrationToken = $integrationToken;
+        $this->helper = $helper;
+        $this->apiEndPoint = $apiEndPoint;
+        $this->logger = $logger;
+        $this->config = $config;
     }
 
     /**
@@ -58,6 +74,27 @@ class Success extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+        //check after upgrade token
+        $setupFlag = $this->config->isSetupUpgradeFlag();
+        if($setupFlag) {
+            $token = $this->integrationToken->genrateIntegrationToken($this->config->getEmail());
+            if(isset($token['token'])) {
+                $this->helper->setConfig(['AccessToken' => $token['token'], 'setup_upgrade' => false]);
+                $data = [];
+                $data['token_type'] = $this->config->getTokenType();
+                $data['storeurl'] = $this->config->getStoreurl();
+                $data['email'] = $this->config->getEmail();
+                $data['token'] = $token['token'];
+                $returnRes = $this->apiEndPoint->sendTokenByCurl($data);
+                $this->logger->logger(
+                    'Integration Token',
+                    'Regenrate ',
+                    json_encode($returnRes),
+                    'Token Regenrate'
+                );
+            }
+        }
+        //end
         $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
         if (!$this->config->isConnected()) {
             $this->messageManager->addErrorMessage('Your magento not connected. Please try again.');

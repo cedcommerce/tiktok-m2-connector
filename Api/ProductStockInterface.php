@@ -7,4 +7,5 @@ interface ProductStockInterface
      * @return mixed|string
      */
     public function getProductsAndStock();
+
 }
