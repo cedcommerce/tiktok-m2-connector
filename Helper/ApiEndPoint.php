@@ -25,7 +25,7 @@ use Magento\Setup\Exception;
 class ApiEndPoint extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
-    const TYPE = 'sandbox'; //sandbox live
+    const TYPE = 'live'; //sandbox live
     const FRAMEWORK = 'TIKTOK'; // TIKTOK
     //const FRAMEWORK = 'ALI'; // Aliexpress
     const URLS = [
