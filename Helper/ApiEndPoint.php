@@ -155,7 +155,7 @@ class ApiEndPoint extends \Magento\Framework\App\Helper\AbstractHelper
         $finaleData = [];
         $finaleData["action"] = "webhook_manage";
         $finaleData['data'] = $data;
-        $url =  self::URLS[self::TYPE]['WEB_HOOK_URL'];
+        $url =  self::URLS[self::FRAMEWORK][self::TYPE]['WEB_HOOK_URL'];
         //$url = self::WEBHOOK_PRODUCT_CHANGE;
         $requestParameters = json_encode($finaleData);
         //@codingStandardsIgnoreStart
