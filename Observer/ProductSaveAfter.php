@@ -103,6 +103,7 @@ class ProductSaveAfter implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
 
+
         $this->logger->logger(
             'Product change',
             'Observer',

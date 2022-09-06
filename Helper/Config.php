@@ -50,6 +50,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     public function getStoreId()
     {
         $value = $this->scopeConfig->getValue(self::SETTING_PATH.'storeID');
+        $value = 1;
         return $value;
     }
 

@@ -28,7 +28,7 @@ class Options extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getAllOptions()
     {
         $data[] = ['value' => self::INTEGRATION_TOKEN,'label' => 'Integration Token'];
-        $data[] = ['value' => self::ADMIN_TOKEN,'label' => 'Admin Token'];
+        //$data[] = ['value' => self::ADMIN_TOKEN,'label' => 'Admin Token'];
         return $data;
     }
 

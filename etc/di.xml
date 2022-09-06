@@ -36,4 +36,8 @@
         <plugin name="integrationDelete" type="Ced\MagentoConnector\Plugin\IntegrationDelete" sortOrder="11"/>
     </type>
 
+    <!--<type name="Magento\Sales\Model\Order\Email\Container\OrderIdentity">
+        <plugin name="change_is_enable_method" type="\Ced\MagentoConnector\Plugin\Sales\Order\Email\Container\OrderIdentityPlugin"/>
+    </type>-->
+
 </config>

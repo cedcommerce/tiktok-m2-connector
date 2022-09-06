@@ -3,9 +3,6 @@
     <event name="catalog_product_save_after">
         <observer name="ced_product_save_after" instance="Ced\MagentoConnector\Observer\ProductSaveAfter" />
     </event>
-    <event name="catalog_product_save_before">
-        <observer name="ProductSaveBefore" instance="Ced\MagentoConnector\Observer\ProductSaveBefore"/>
-    </event>
     <event name="catalog_product_delete_after_done">
         <observer name="ced_product_delete" instance="Ced\MagentoConnector\Observer\ProductDelete"/>
     </event>

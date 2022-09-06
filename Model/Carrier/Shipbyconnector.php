@@ -20,9 +20,10 @@
 namespace Ced\MagentoConnector\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use \Magento\Shipping\Model\Carrier\CarrierInterface;
+use \Magento\Shipping\Model\Carrier\AbstractCarrier;
 
-class Shipbyconnector extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
-    \Magento\Shipping\Model\Carrier\CarrierInterface
+class Shipbyconnector extends AbstractCarrier implements CarrierInterface
 {
     public $_code = 'shipbyconnector';
 
@@ -79,12 +80,10 @@ class Shipbyconnector extends \Magento\Shipping\Model\Carrier\AbstractCarrier im
         if (!$this->getConfigFlag('active')) {
             return false;
         }
-        if ($this->appState->getAreaCode() != 'adminhtml') {
+
+        if ($this->appState->getAreaCode() != 'webapi_rest') {
             return false;
         }
-        /*if ($this->appState->getAreaCode() == 'webapi_rest') {
-            return false;
-        }*/
 
         if ($this->appState->getAreaCode() =='crontab'
             || $this->appState->getAreaCode() =='adminhtml'

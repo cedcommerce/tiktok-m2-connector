@@ -81,8 +81,7 @@
                     <item name="tooltip" xsi:type="array">
                         <item name="description" xsi:type="string"><![CDATA[
                             <b>Intgration Token : </b> Magento will verify the login information using the integration token for granting access.<br/>
-                            <b>Admin Token :</b> Magento will verify the login information using the admin token for granting access.<br/>
-                             <b>Note: </b> It is highly recommended to use the Integration Token to establish a secure connection between your Magento store and CedCommerce App.]]>
+                            ]]>
                         </item>
                     </item>
                     <item name="component" xsi:type="string">Ced_MagentoConnector/js/form/element/options</item>

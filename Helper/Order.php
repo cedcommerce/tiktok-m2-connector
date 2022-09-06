@@ -83,6 +83,8 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
 
     public $connecterOrderFactory;
 
+    public $registry;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Quote\Model\QuoteFactory $quote,
@@ -108,6 +110,7 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Framework\DB\Transaction $dbTransaction,
         \Magento\Catalog\Model\ProductFactory $product,
+        \Magento\Framework\Registry $registry,
         \Ced\MagentoConnector\Model\OrderFactory $connecterOrderFactory
     ) {
         $this->creditmemoLoaderFactory = $creditmemoLoaderFactory;
@@ -133,6 +136,7 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
         $this->dbTransaction = $dbTransaction;
         $this->stockRegistry = $stockRegistry;
         $this->messageManager = $messageManager;
+        $this->registry = $registry;
         $this->connecterOrderFactory = $connecterOrderFactory;
         parent::__construct($context);
     }
@@ -405,7 +409,6 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
             unset($customerName[0]);
             $customerName = array_values($customerName) ;
             $lastname = implode(' ', $customerName);
-
             // after save order
             if (count($productArray) > 0 && count($itemsArray) == count($productArray) && ! $autoReject) {
 
@@ -449,6 +452,14 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                     ]
                 ];
 
+                $this->registry->register(
+                    'is_ced_connecter_order',
+                    $purchaseOrderId
+                );
+                $this->registry->register(
+                    'marketplace_name',
+                    $order['source_marketplace']
+                );
                 $quote->getBillingAddress()->addData($orderData['shipping_address']);
                 $shippingAddress = $quote->getShippingAddress()->addData($orderData['shipping_address']);
                 $shippingAddress->setCollectShippingRates(true)->collectShippingRates()
@@ -478,6 +489,7 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                 }
                 $orderAfterQuote = $this->cartManagementInterface->submit($quote);
                 $orderId =  $purchaseOrderId;
+
                 $orderAfterQuote->setShippingAmount($shippingcost);
                 $orderAfterQuote->setTaxAmount($taxTotal);
                 $orderAfterQuote->setBaseTaxAmount($taxTotal);
@@ -522,6 +534,8 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                 $returnData['success']['requested_order_id'] = $purchaseOrderId;
             }
         } catch (\Exception $e) {
+            echo $e->getMessage();
+            die;
             $this->logger->logger(
                 'Exception',
                 'Order create',
