@@ -529,13 +529,19 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                 $order = $this->orderFactory->create()
                     ->loadByAttribute('increment_id', $purchaseOrderId);
                 $entityId = $order->getId();
+
+                if ($this->registry->registry('is_ced_connecter_order')) {
+                    $this->registry->unregister('is_ced_connecter_order');
+                }
+                if ($this->registry->registry('marketplace_name')) {
+                    $this->registry->unregister('marketplace_name');
+                }
                 $returnData['success']['message'] = $purchaseOrderId. ' Order created SuccessFully .';
                 $returnData['success']['entity_id'] = $entityId;
                 $returnData['success']['requested_order_id'] = $purchaseOrderId;
             }
         } catch (\Exception $e) {
-            echo $e->getMessage();
-            die;
+        
             $this->logger->logger(
                 'Exception',
                 'Order create',
