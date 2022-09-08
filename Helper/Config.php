@@ -108,12 +108,6 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         $value = $this->scopeConfig->getValue(self::SETTING_PATH.'setup_upgrade');
         return $value;
     }
-    
-    public function isSetupUpgradeFlag()
-    {
-        $value = $this->scopeConfig->getValue(self::SETTING_PATH.'setup_upgrade');
-        return $value;
-    }
 
     public function getEmail()
     {
