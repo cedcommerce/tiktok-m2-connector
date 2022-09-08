@@ -43,12 +43,18 @@ class Shipbyconnector extends AbstractCarrier implements CarrierInterface
     public $_rateMethodFactory;
 
     public $_state;
+
+    public $registry;
+
     /**
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
+     * @param \Magento\Framework\App\State $state
      * @param array $data
      */
     public function __construct(
@@ -57,11 +63,13 @@ class Shipbyconnector extends AbstractCarrier implements CarrierInterface
         \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
+        \Magento\Framework\Registry $registry,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         \Magento\Framework\App\State $state,
         $data = []
     ) {
         $this->appState = $appState;
+        $this->registry = $registry;
         $this->_rateResultFactory = $rateResultFactory;
         $this->_rateMethodFactory = $rateMethodFactory;
         $this->_logger = $logger;
@@ -81,7 +89,13 @@ class Shipbyconnector extends AbstractCarrier implements CarrierInterface
             return false;
         }
 
-        if ($this->appState->getAreaCode() != 'webapi_rest') {
+        $iscedconnecterorder = $this->registry->registry('is_ced_connecter_order');
+        $marketplacename = $this->registry->registry('marketplace_name');
+        if($iscedconnecterorder) {
+            if ($marketplacename === NULL) {
+                return false;
+            }
+        } else {
             return false;
         }
 
