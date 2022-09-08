@@ -30,7 +30,7 @@ class Recurring implements InstallSchemaInterface
     {
         $setup->startSetup();
         $data = [];
-        if (true || $this->config->isConnected()) {
+        if ($this->config->isConnected()) {
             $this->helper->setConfig(['setup_upgrade' => true]);
             $data['token_type'] = $this->config->getTokenType();
             $data['storeurl'] = $this->config->getStoreurl();
