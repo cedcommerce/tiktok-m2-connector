@@ -159,13 +159,13 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
         $this->storeManager->setCurrentStore($store);
         if (isset($response['orders'])) {
             foreach ($response['orders'] as $order) {
-               /* if (!isset($order['user_id']) || $order['user_id'] != $this->helperConfig->getUserId()) {
-                    $returnData['error'][] = [
-                        'message' => "Invalid User Id, Make sure you are authorized user",
-                        'requested_order_id' =>  $order ['ordersn'],
-                    ];
-                    continue;
-                }*/
+                /* if (!isset($order['user_id']) || $order['user_id'] != $this->helperConfig->getUserId()) {
+                     $returnData['error'][] = [
+                         'message' => "Invalid User Id, Make sure you are authorized user",
+                         'requested_order_id' =>  $order ['ordersn'],
+                     ];
+                     continue;
+                 }*/
                 $orderObject =  $order ;
                 $email = isset($order['buyer_email']) ? $order ['buyer_email'] : 'customer@aliconnecter.com';
                 $customer = $this->customerFactory->create()->setWebsiteId($websiteId)->loadByEmail($email);
@@ -263,6 +263,7 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function _assignCustomer($order, $customer, $store, $email)
     {
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
         if (!($customer->getId())) {
             try {
                 $cname = $order['buyer_username'];
@@ -271,7 +272,6 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                 unset($customerName[0]);
                 $customerName = array_values($customerName) ;
                 $lastname = implode(' ', $customerName);
-                $websiteId = $this->storeManager->getStore()->getWebsiteId();
                 $customer = $this->customerFactory->create();
                 $customer->setWebsiteId($websiteId);
                 $customer->setEmail($email);
@@ -281,6 +281,7 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                 $customer->setLastname($lastname);
                 $customer->setPassword("password");
                 $customer->save();
+                $customer = $this->unasignDefaultAddress($customer, $websiteId);
                 return $customer;
             } catch (\Exception $e) {
                 $this->logger->logger(
@@ -292,8 +293,27 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                 return ['error' => $e->getMessage()];
             }
         } else {
+            $customer = $this->unasignDefaultAddress($customer, $websiteId);
             return $customer;
         }
+    }
+
+    public function unasignDefaultAddress($customer, $websiteId)
+    {
+        $shippingAddressId = $customer->getDefaultShipping();
+        $billingAddressId = $customer->getDefaultBilling();
+        if($billingAddressId) {
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $address = $objectManager->create('Magento\Customer\Model\Address')->load($billingAddressId);
+            $address->setIsDefaultBilling(false)->save();
+        }
+        if($shippingAddressId) {
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $address = $objectManager->create('Magento\Customer\Model\Address')->load($shippingAddressId);
+            $address->setIsDefaultShipping(false)->save();
+        }
+        $customer = $this->customerFactory->create()->setWebsiteId($websiteId)->load($customer->getId());
+        return $customer;
     }
 
     /**
@@ -315,6 +335,8 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
             $baseprice = '';
             $shippingcost = '';
             $tax = '';
+            $discounts = [];
+            $totalDiscounts = 0;
             //$quote = $this->quote->create();
             $cart_id = $this->cartManagementInterface->createEmptyCart();
             $quote = $this->cartRepositoryInterface->get($cart_id);
@@ -360,9 +382,15 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                             ];
 
                             $price = $item ['variation_original_price'];
-                            $price = (isset($item['variation_discounted_price']) &&
+                            /*$price = (isset($item['variation_discounted_price']) &&
                                 $item['variation_discounted_price'] > 0) ?
-                                $item ['variation_discounted_price'] : $price;
+                                $item ['variation_discounted_price'] : $price;*/
+                            $rowdiscount =  (isset($item['variation_discounted_price']) &&
+                                $item['variation_discounted_price'] > 0) ?
+                                $item ['variation_discounted_price'] : 0;
+                            $discounts[$product->getSku()] = $rowdiscount;
+
+                            $totalDiscounts = $totalDiscounts+$rowdiscount;
                             /*if (isset($item['variation_discounted_price']) &&
                                 $item['variation_discounted_price'] > 0) {
                                 $price = $item ['variation_discounted_price'];
@@ -451,7 +479,12 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                         'save_in_address_book' => 1
                     ]
                 ];
-
+                if ($this->registry->registry('is_ced_connecter_order')) {
+                    $this->registry->unregister('is_ced_connecter_order');
+                }
+                if ($this->registry->registry('marketplace_name')) {
+                    $this->registry->unregister('marketplace_name');
+                }
                 $this->registry->register(
                     'is_ced_connecter_order',
                     $purchaseOrderId
@@ -475,10 +508,12 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                 $quote->collectTotals()->save();
 
                 foreach ($quote->getAllItems() as $item) {
-                    $item->setDiscountAmount(0);
-                    $item->setBaseDiscountAmount(0);
-
                     $sku = $item->getProduct()->getSku();
+                    if (isset($discounts[$sku])) {
+                        $item->setDiscountAmount($discounts[$sku]);
+                        $item->setBaseDiscountAmount($discounts[$sku]);
+                    }
+
                     if (isset($taxArray[$sku])) {
                         $item->setTaxAmount($taxArray[$sku]);
                         $item->setBaseTaxAmount($taxArray[$sku]);
@@ -494,7 +529,10 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                 $orderAfterQuote->setTaxAmount($taxTotal);
                 $orderAfterQuote->setBaseTaxAmount($taxTotal);
                 $orderAfterQuote->setSubTotal($subTotal);
-                $orderAfterQuote->setGrandTotal($subTotal + $shippingcost+$taxTotal)  ;
+                $orderAfterQuote->setBaseSubTotal($subTotal);
+                $orderAfterQuote->setDiscountAmount($totalDiscounts);
+                $orderAfterQuote->setBaseDiscountAmount($totalDiscounts);
+                $orderAfterQuote->setGrandTotal($subTotal + $shippingcost+$taxTotal-$totalDiscounts)  ;
                 $orderAfterQuote->setIncrementId($orderId);
                 //set data in custom table
                 $model = $this->connecterOrderFactory->create()->load($orderId);
@@ -541,7 +579,12 @@ class Order extends \Magento\Framework\App\Helper\AbstractHelper
                 $returnData['success']['requested_order_id'] = $purchaseOrderId;
             }
         } catch (\Exception $e) {
-        
+            if ($this->registry->registry('is_ced_connecter_order')) {
+                $this->registry->unregister('is_ced_connecter_order');
+            }
+            if ($this->registry->registry('marketplace_name')) {
+                $this->registry->unregister('marketplace_name');
+            }
             $this->logger->logger(
                 'Exception',
                 'Order create',
