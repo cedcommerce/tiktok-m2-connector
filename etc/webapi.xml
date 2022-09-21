@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/order/create/" method="POST">
+        <service class="Ced\MagentoConnector\Api\OrderInterface" method="setData"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::order_create"/>
+        </resources>
+    </route>
+    <route url="/V1/connection/callback/" method="POST">
+        <service class="Ced\MagentoConnector\Api\CallbackInterface" method="setData"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::callback"/>
+        </resources>
+    </route>
+    <route url="/V1/order/cancel/:id" method="POST">
+        <service class="Ced\MagentoConnector\Api\OrderInterface" method="cancelOrder"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::order_cancel"/>
+        </resources>
+    </route>
+
+    <route url="/V1/order/status" method="GET">
+        <service class="Ced\MagentoConnector\Api\OrderInterface" method="getStatusList"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::order_status"/>
+        </resources>
+    </route>
+    <route url="/V1/refreshtoken/:userid" method="GET">
+        <service class="Ced\MagentoConnector\Api\TokenInterface" method="getRefreshToken"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/carriers/:userid" method="GET">
+        <service class="Ced\MagentoConnector\Api\CarrierListInterface" method="getCarriers"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::carriers_list"/>
+        </resources>
+    </route>
+
+    <route url="/V1/currency/:userid" method="GET">
+        <service class="Ced\MagentoConnector\Api\CurrencyListInterface" method="getCurrency"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::currency_list"/>
+        </resources>
+    </route>
+
+    <route url="/V1/variantattr/:userid" method="GET">
+        <service class="Ced\MagentoConnector\Api\VariantAttributeInterface" method="getAttributes"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::variant_attr"/>
+        </resources>
+    </route>
+    <route url="/V1/attroptions/:attrCode" method="GET">
+        <service class="Ced\MagentoConnector\Api\AttributeOptionsInterface" method="getAttributOptions"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::attr_options"/>
+        </resources>
+    </route>
+
+    <route url="/V1/productsstock/" method="POST">
+        <service class="Ced\MagentoConnector\Api\ProductStockInterface" method="getProductsAndStock"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::ced_product_stock"/>
+        </resources>
+    </route>
+
+    <route url="/V1/logs/" method="GET">
+        <service class="Ced\MagentoConnector\Api\LogsInterface" method="getLogs"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::logslist"/>
+        </resources>
+    </route>
+    <route url="/V1/logs/delete/" method="GET">
+        <service class="Ced\MagentoConnector\Api\LogsInterface" method="deleteLogs"/>
+        <resources>
+            <resource ref="Ced_MagentoConnector::logsdelete"/>
+        </resources>
+    </route>
+</routes>

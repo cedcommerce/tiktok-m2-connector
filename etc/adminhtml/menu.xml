@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_MagentoConnector
+ * @author 		CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (http://cedcommerce.com/)
+ * @license      http://cedcommerce.com/license-agreement.txt
+ */
+
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>
+
+        <add id="Ced_MagentoConnector::mconnector"
+             title="Ced Connector"
+             module="Ced_MagentoConnector"
+             sortOrder="10"
+             resource="Ced_MagentoConnector::mconnector"
+        />
+
+        <add id="Ced_MagentoConnector::connect_shop"
+             title="TikTok Shop Connector"
+             module="Ced_MagentoConnector"
+             sortOrder="10"
+             parent="Ced_MagentoConnector::mconnector"
+             action="mconnector/connect/index"
+             resource="Ced_MagentoConnector::connect_shop"
+        />
+        <add id="Ced_MagentoConnector::logs"
+             title="Logs"
+             module="Ced_MagentoConnector"
+             sortOrder="20"
+             parent="Ced_MagentoConnector::mconnector"
+             action="mconnector/logs/loggrid"
+             resource="Ced_MagentoConnector::logs"
+        />
+        <add id="Ced_MagentoConnector::configuration"
+             title="Configuration"
+             module="Ced_MagentoConnector"
+             sortOrder="50"
+             parent="Ced_MagentoConnector::mconnector"
+             action="adminhtml/system_config/edit/section/connector"
+             resource="Ced_MagentoConnector::configuration"
+        />
+    </menu>
+</config>
