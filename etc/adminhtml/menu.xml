@@ -55,5 +55,13 @@
              action="adminhtml/system_config/edit/section/connector"
              resource="Ced_MagentoConnector::configuration"
         />
+        <add id="Ced_MagentoConnector::extra"
+             title="Help &amp; Support"
+             module="Ced_MagentoConnector"
+             sortOrder="100"
+             parent="Ced_MagentoConnector::mconnector"
+             action="mconnector/help/index"
+             resource="Ced_MagentoConnector::extra"
+        />
     </menu>
 </config>

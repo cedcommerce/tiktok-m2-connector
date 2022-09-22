@@ -12,6 +12,8 @@
                     </resource>
                     <resource id="Ced_MagentoConnector::configuration" title="Configuration"  sortOrder="5">
                     </resource>
+                    <resource id="Ced_MagentoConnector::extra" title="Help &amp; Support"  sortOrder="100">
+                    </resource>
                     <resource id="Ced_MagentoConnector::order_create" title="Order Create"
                               translate="title" sortOrder="10" />
                     <resource id="Ced_MagentoConnector::order_cancel" title="Order Cancel"
