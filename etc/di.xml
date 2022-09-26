@@ -36,4 +36,8 @@
     <type name="Magento\Sales\Model\Order\Email\Container\OrderIdentity">
         <plugin name="change_is_enable_method" type="\Ced\MagentoConnector\Plugin\Sales\Order\Email\Container\OrderIdentityPlugin"/>
     </type>
+
+    <type name="\Magento\Shipping\Model\Order\Track">
+        <plugin name="ced_otto_shipment" type="\Ced\MagentoConnector\Plugin\Shipping" sortOrder="1"/>
+    </type>
 </config>

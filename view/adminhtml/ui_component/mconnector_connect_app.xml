@@ -64,7 +64,7 @@
                     <item name="label" xsi:type="string" translate="true">Group Title</item>
                 </item>
             </argument>
-            <argument name="block" xsi:type="object">Ced\MagentoConnector\Block\Adminhtml\Shop\Iframe</argument>
+            <block name="ced_app_iframe" class="Ced\MagentoConnector\Block\Adminhtml\Shop\Iframe"/>
         </htmlContent>
     </container>
 </form>
